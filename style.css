@@ -1,0 +1,359 @@
+:root {
+    --primary: #2c3e50; /* Dark Slate */
+    --accent: #e67e22; /* Mountain Orange/Rust */
+    --dark: #1a1a1a;
+    --light: #f9f9f9;
+    --white: #ffffff;
+    --text-body: #333333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.6;
+    color: var(--text-body);
+    background-color: var(--light);
+}
+
+h1, h2, h3, h4, .logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background: rgba(0,0,0,0.95);
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 2px solid var(--accent);
+}
+
+.logo {
+    color: var(--white);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: var(--white);
+    padding: 0.8rem 2rem;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary:hover {
+    background: #d35400;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: url('https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070&auto=format&fit=crop'); 
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); /* Darken the image */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 0 1rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
+}
+
+/* Sections */
+section {
+    padding: 5rem 5%;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+}
+
+.lead {
+    font-size: 1.25rem;
+    color: #555;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Grid System */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.card {
+    background: var(--white);
+    padding: 2.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    text-align: left;
+    border-bottom: 3px solid var(--primary);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-bottom: 3px solid var(--accent);
+}
+
+.card h3, .card h4 {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    color: var(--primary);
+}
+
+/* Adventure Bot UI */
+.adventure-finder {
+    background: #eef2f3;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.bot-interface {
+    max-width: 700px;
+    margin: 2rem auto 0;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    text-align: left;
+}
+
+.chat-window {
+    padding: 2rem;
+    background: #f9f9f9;
+}
+
+.chat-message {
+    background: var(--primary);
+    color: var(--white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-bottom-left-radius: 0;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.chat-message::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right-color: var(--primary);
+    border-bottom: 0;
+    margin-bottom: 0;
+}
+
+.chat-controls {
+    text-align: right;
+}
+
+.chat-options {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.btn-option {
+    background: var(--white);
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    transition: all 0.2s;
+}
+
+.btn-option:hover {
+    background: var(--accent);
+    color: var(--white);
+}
+
+/* Meet Ernest Section */
+.about-guide {
+    background: var(--primary);
+    color: var(--white);
+    text-align: left;
+}
+
+.bio-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.bio-text h2 {
+    color: var(--white);
+    text-align: left;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.check-list {
+    list-style: none;
+    margin: 1.5rem 0;
+}
+
+.check-list li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.check-list li::before {
+    content: "✔";
+    color: var(--accent);
+    position: absolute;
+    left: 0;
+}
+
+.philosophy {
+    border-left: 4px solid var(--accent);
+    padding-left: 1rem;
+    font-style: italic;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    color: #ddd;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 400px;
+    background: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    border: 2px dashed #666;
+}
+
+/* Values Section */
+.values-section {
+    background-color: var(--light);
+}
+
+.values-heading {
+    margin-top: 3rem;
+    font-size: 2rem;
+}
+
+.value-card {
+    text-align: center;
+    padding: 2rem;
+    border: none;
+    background: var(--white);
+}
+
+.value-card h4 {
+    color: var(--accent);
+}
+
+/* Contact */
+.contact {
+    background: #111;
+    color: var(--white);
+    text-align: center;
+}
+
+.contact h2 {
+    color: var(--white);
+}
+
+/* Footer */
+footer {
+    background: #000;
+    color: #555;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2.2rem; }
+    .nav-links { display: none; } /* TODO: Mobile Toggle */
+    .bio-layout { grid-template-columns: 1fr; gap: 2rem; }
+    .bio-text { order: 2; }
+    .bio-image-container { order: 1; }
+    section { padding: 3rem 5%; }
+}
