@@ -281,7 +281,7 @@ h2 {
 }
 
 .check-list li::before {
-    content: "✔";
+    content: \"✔\";
     color: var(--accent);
     position: absolute;
     left: 0;
@@ -296,15 +296,19 @@ h2 {
     color: #ddd;
 }
 
-.image-placeholder {
+/* Bio Image */
+.bio-image-container {
     width: 100%;
-    height: 400px;
-    background: #444;
     display: flex;
-    align-items: center;
     justify-content: center;
-    color: #888;
-    border: 2px dashed #666;
+}
+
+.bio-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 4px solid var(--white);
 }
 
 /* Values Section */
@@ -346,6 +350,39 @@ footer {
     text-align: center;
     padding: 2rem;
     font-size: 0.85rem;
+}
+
+/* Agency Credit (State of Ashes) */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.agency-credit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.soa-text {
+    font-family: 'Fredericka the Great', cursive;
+    font-size: 1.4rem; /* Larger to show off the texture */
+    color: #888;
+    text-transform: none; /* Keep the font's natural casing */
+    letter-spacing: 2px;
+    transition: color 0.3s;
+}
+
+.soa-text:hover {
+    color: var(--white);
+    text-shadow: 0 0 10px rgba(255,255,255,0.2);
 }
 
 /* Responsive */

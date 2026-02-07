@@ -3,63 +3,85 @@
 const chatWindow = document.getElementById('chat-window');
 const chatControls = document.querySelector('.chat-controls');
 
-// Initial State: Waiting for Fitness Level
-const optionsLevel = document.querySelectorAll('.btn-option');
+// Initial Options (HTML string with onclick handlers)
+const initialOptionsHTML = `
+    <div class="chat-options">
+        <button class="btn-option" onclick="selectLevel(1, '1 - Beginner (Chill)')">1 - Beginner (Chill)</button>
+        <button class="btn-option" onclick="selectLevel(3, '3 - Intermediate (Active)')">3 - Intermediate (Active)</button>
+        <button class="btn-option" onclick="selectLevel(5, '5 - Advanced (Athlete)')">5 - Advanced (Athlete)</button>
+    </div>
+`;
 
-optionsLevel.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const level = parseInt(e.target.dataset.level || 1); // Add data-level to html buttons later, or infer from text
-        // For now, inferring from text content for simplicity if attributes aren't there yet
-        let selectedLevel = 1;
-        if(e.target.textContent.includes('3')) selectedLevel = 3;
-        if(e.target.textContent.includes('5')) selectedLevel = 5;
+// FORCE INITIALIZE: Overwrite the static HTML to ensure onclicks are active
+chatControls.innerHTML = initialOptionsHTML;
 
-        handleUserSelection(selectedLevel, e.target.textContent);
-    });
-});
+// -----------------------------------
+// Global Window Functions (for inline onclicks)
+// -----------------------------------
+
+window.selectLevel = function(level, text) {
+    handleUserSelection(level, text);
+};
+
+window.resetBot = function() {
+    // Clear chat window except the first greeting? 
+    // Or just append a divider. Let's just append.
+    
+    // Restore initial options
+    chatControls.innerHTML = initialOptionsHTML;
+    
+    // Helper to scroll
+    scrollToBottom();
+};
 
 function handleUserSelection(level, text) {
-    // 1. User Message (Visual echo of what they clicked)
+    // 1. User Message
     addMessage(text, 'user-msg');
 
-    // 2. Remove old controls
+    // 2. Clear controls to prevent double clicking
     chatControls.innerHTML = ''; 
 
     // 3. Bot "Thinking"
     addTypingIndicator();
 
+    // 4. Artificial Delay
     setTimeout(() => {
         removeTypingIndicator();
-        // 4. Filter Routes
-        const recommendations = findRoutes(level);
+        
+        // 5. Filter Routes
+        // Ensure routes.js is loaded. If not, fallback.
+        const safeFindRoutes = (typeof findRoutes === 'function') ? findRoutes : () => [];
+        const recommendations = safeFindRoutes(level);
         
         if (recommendations.length > 0) {
             addMessage(`Great choice. Based on your fitness level (${level}/5), here are the best adventures for you:`, 'bot-msg');
             
-            // 5. Display Cards
             recommendations.forEach(route => {
                 addRouteCard(route);
             });
 
-            // 6. Final Call to Action
-            addMessage("Select a route to see full details or book.", 'bot-msg');
+            addMessage("Select a route to book, or start over to check other levels.", 'bot-msg');
         } else {
-            addMessage("I couldn't find a specific route for that level right now, but Ernest can customize a trip for you.", 'bot-msg');
-            addCustomButton("Contact Ernest for Custom Trip");
+            addMessage("I don't have a specific route for that exact level right now, but we can customize one.", 'bot-msg');
         }
 
-    }, 800); // 800ms delay for realism
+        // 6. Add "Back" / Reset Button
+        addBackButton();
+
+    }, 600);
 }
 
+// -----------------------------------
 // UI Helper Functions
+// -----------------------------------
+
 function addMessage(text, className) {
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('chat-message', className);
     msgDiv.innerHTML = `<p>${text}</p>`;
-    chatWindow.insertBefore(msgDiv, chatControls.parentElement.querySelector('.chat-controls')); // Insert before controls
-    
-    // Auto scroll
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+    // Insert before the controls area
+    chatWindow.insertBefore(msgDiv, chatControls.parentElement.querySelector('.chat-controls'));
+    scrollToBottom();
 }
 
 function addRouteCard(route) {
@@ -69,6 +91,9 @@ function addRouteCard(route) {
     card.style.backgroundColor = "#fff";
     card.style.color = "#333";
     
+    // Price formatting check
+    const priceDisplay = (typeof route.logistics.price === 'number') ? `R${route.logistics.price} pp` : route.logistics.price;
+
     card.innerHTML = `
         <h4 style="color:#2c3e50; margin-bottom:5px;">${route.name}</h4>
         <p style="font-size:0.9rem; color:#666;">📍 ${route.location}</p>
@@ -78,12 +103,22 @@ function addRouteCard(route) {
         </div>
         <p style="font-size:0.9rem;">${route.specs.terrain}</p>
         <div style="margin-top:10px; font-weight:bold; color:#e67e22;">
-            R${route.logistics.price} pp
+            ${priceDisplay}
         </div>
         <button onclick="bookRoute('${route.id}')" class="btn-primary" style="margin-top:10px; width:100%; font-size:0.8rem;">Book This Adventure</button>
     `;
     
     chatWindow.insertBefore(card, chatControls.parentElement.querySelector('.chat-controls'));
+    scrollToBottom();
+}
+
+function addBackButton() {
+    chatControls.innerHTML = `
+        <div class="chat-options">
+            <button class="btn-option" onclick="resetBot()" style="border-color:#ccc; color:#666;">← Start Over</button>
+        </div>
+    `;
+    scrollToBottom();
 }
 
 function addTypingIndicator() {
@@ -92,6 +127,7 @@ function addTypingIndicator() {
     typing.classList.add('chat-message', 'bot-msg');
     typing.innerHTML = '<p><em>Thinking...</em></p>';
     chatWindow.insertBefore(typing, chatControls.parentElement.querySelector('.chat-controls'));
+    scrollToBottom();
 }
 
 function removeTypingIndicator() {
@@ -99,9 +135,13 @@ function removeTypingIndicator() {
     if(typing) typing.remove();
 }
 
-function bookRoute(routeId) {
-    // For now, just alert or redirect to WhatsApp
+function scrollToBottom() {
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+window.bookRoute = function(routeId) {
     const route = routes.find(r => r.id === routeId);
+    if (!route) return;
     const msg = `Hi Ernest, I'm interested in booking the ${route.name}.`;
     const whatsappUrl = `https://wa.me/27825654084?text=${encodeURIComponent(msg)}`;
     window.open(whatsappUrl, '_blank');
